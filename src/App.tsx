@@ -1,26 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react'
+import AppRouter from './components/AppRouter'
+import 'antd'
+import NavBar from './components/NavBar'
+import { useTypedSelector } from './hooks/useTypesSelector'
+import { useDispatchHook } from './hooks/useDispatchHook'
+import { IUser } from './models/IUser'
 
-function App() {
+const App:React.FC = () => {
+  const {isAuth,user} = useTypedSelector(state => state.auth)
+  const {setIAuth,setUser} = useDispatchHook()
+
+  useEffect(() => {
+    if(localStorage.getItem('mockUser') && localStorage.getItem('isAuth')){
+      setIAuth(true)
+      setUser({username : localStorage.getItem('mockUser' || '')} as IUser)
+    }
+  },[])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>      
+      <NavBar/>
+      <AppRouter/>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
